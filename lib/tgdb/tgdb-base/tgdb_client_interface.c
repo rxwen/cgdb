@@ -6,6 +6,7 @@
 
 #include "gdbmi_tgdb.h"
 #include "a2-tgdb.h"
+#include "jdb_tgdb.h"
 #include "sys_util.h"
 
 /**
@@ -153,6 +154,45 @@ static struct tgdb_client_debugger_interfaces {
                 NULL,
                 /* tgdb_client_get_tty_name */
     NULL}, {
+        TGDB_CLIENT_DEBUGGER_JDB, TGDB_CLIENT_PROTOCOL_JDB,
+                /* tgdb_client_create_context */
+                jdb_create_context,
+                /* tgdb_client_initialize_context */
+                jdb_initialize,
+                /* tgdb_client_destroy_context */
+                jdb_shutdown,
+                /* tgdb_client_err_msg */
+                jdb_err_msg,
+                /* tgdb_client_is_client_ready */
+                jdb_is_client_ready,
+                /* tgdb_client_tgdb_ran_command */
+                jdb_user_ran_command,
+                /* tgdb_client_prepare_for_command */
+                jdb_prepare_for_command,
+                /* tgdb_client_can_tgdb_run_commands */
+                jdb_is_misc_prompt,
+                /* tgdb_client_parse_io */
+                jdb_parse_io,
+                /* tgdb_client_get_client_commands */
+                jdb_get_client_commands,
+                /* tgdb_client_get_filename_pair */
+                jdb_get_source_filename_pair,
+                /* tgdb_client_get_current_location */
+                jdb_get_current_location,
+                /* tgdb_client_get_inferior_source_files */
+                jdb_get_inferior_sources,
+                /* tgdb_client_completion_callback */
+                jdb_completion_callback,
+                /* tgdb_client_return_command */
+                jdb_return_client_command,
+                /* tgdb_client_modify_breakpoint */
+                jdb_client_modify_breakpoint,
+                /* tgdb_client_get_debugger_pid */
+                jdb_get_debugger_pid,
+                /* tgdb_client_open_new_tty */
+                jdb_open_new_tty,
+                /* tgdb_client_get_tty_name */
+    jdb_get_tty_name}, {
         TGDB_CLIENT_DEBUGGER_UNSUPPORTED, TGDB_CLIENT_PROTOCOL_UNSUPPORTED,
                 /* tgdb_client_create_context */
                 NULL,
@@ -252,6 +292,20 @@ struct tgdb_client_context *tgdb_client_create_context(const char
                 tgdb_client_create_context(debugger_path, argc, argv,
                 config_dir, logger);
 
+        if (tcc->tgdb_debugger_context == NULL) {
+            logger_write_pos(tcc->logger, __FILE__, __LINE__,
+                    "a2_create_instance failed");
+            free(tcc);
+            return NULL;
+        }
+    } else if (debugger == TGDB_CLIENT_DEBUGGER_JDB &&
+                protocol == TGDB_CLIENT_PROTOCOL_JDB) {
+        tcc->tgdb_client_interface = &tgdb_client_debugger_interfaces[2];
+
+        tcc->tgdb_debugger_context =
+                tcc->tgdb_client_interface->
+                tgdb_client_create_context(debugger_path, argc, argv,
+                config_dir, logger);
         if (tcc->tgdb_debugger_context == NULL) {
             logger_write_pos(tcc->logger, __FILE__, __LINE__,
                     "a2_create_instance failed");

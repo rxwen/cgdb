@@ -334,3 +334,44 @@ int jdb_open_new_tty(void *ctx, int *inferior_stdin, int *inferior_stdout)
 
     return 0;
 }
+
+int jdb_get_source_filename_pair(void *ctx, const char *file)
+{
+    return 0;
+}
+
+int jdb_err_msg(void *ctx) 
+{
+    return 0;
+}
+
+int jdb_is_misc_prompt(void *ctx)
+{ 
+    return 0;
+}
+
+int jdb_completion_callback(void *ctx, const char *command)
+{
+    return 0;
+}
+
+int jdb_get_inferior_sources(void *ctx)
+{
+    return 0;
+}
+
+char *jdb_return_client_command(void *ctx, enum tgdb_command_type c)
+{
+    return NULL;
+}
+
+char *jdb_client_modify_breakpoint(void *ctx,
+        const char *file, int line, enum tgdb_breakpoint_action b)
+{
+    return NULL;
+}
+
+char *jdb_get_tty_name(void *ctx)
+{
+    return NULL;
+}

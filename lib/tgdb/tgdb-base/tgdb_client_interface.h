@@ -71,7 +71,12 @@ enum tgdb_client_supported_debuggers {
     /**
      * This is of course the gnu debugger (GDB).
 	 */
-    TGDB_CLIENT_DEBUGGER_GNU_GDB
+    TGDB_CLIENT_DEBUGGER_GNU_GDB,
+
+    /**
+     * This is jdb
+	 */
+    TGDB_CLIENT_DEBUGGER_JDB
 };
 
 /**
@@ -104,7 +109,12 @@ enum tgdb_client_supported_protocols {
      * It allows for the most functionality to be retrieved from GDB and 
  	 * sent back to the front end.
 	 */
-    TGDB_CLIENT_PROTOCOL_GNU_GDB_GDBMI
+    TGDB_CLIENT_PROTOCOL_GNU_GDB_GDBMI,
+
+    /**
+	 * This is the protocol to use with JDB.
+	 */
+    TGDB_CLIENT_PROTOCOL_JDB
 };
 
 /******************************************************************************/

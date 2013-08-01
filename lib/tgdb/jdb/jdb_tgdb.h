@@ -453,4 +453,5 @@ char *jdb_get_tty_name(void *ctx);
 /*@}*/
 
 int jdb_get_current_location(void *ctx, int on_startup);
+int jdb_get_source_filename_pair(void *ctx, const char *file);
 #endif /* __JDB_TGDB_H__ */
