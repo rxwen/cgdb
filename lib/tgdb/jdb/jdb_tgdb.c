@@ -155,8 +155,13 @@ void *jdb_create_context(const char *debugger,
         int argc, char **argv, const char *config_dir, struct logger *logger)
 {
     struct tgdb_jdb *jdb = initialize_tgdb_jdb();
+    char* args[] = {
+        "-connect",
+        "com.sun.jdi.SocketAttach:hostname=localhost,port=8000",
+        NULL
+    };
     jdb->debugger_pid =
-            invoke_debugger(debugger, argc, argv,
+            invoke_debugger("jdb", 2, args,
             &jdb->debugger_stdin, &jdb->debugger_out,
             1, jdb->jdb_init_file);
     jdb->tgdb_cur_output_command = ibuf_init();

@@ -300,6 +300,12 @@ struct tgdb_client_context *tgdb_client_create_context(const char
         }
     } else if (debugger == TGDB_CLIENT_DEBUGGER_JDB &&
                 protocol == TGDB_CLIENT_PROTOCOL_JDB) {
+        tcc = (struct tgdb_client_context *)
+                cgdb_malloc(sizeof (struct tgdb_client_context));
+        tcc->debugger = debugger;
+        tcc->protocol = protocol;
+        tcc->logger = logger;
+
         tcc->tgdb_client_interface = &tgdb_client_debugger_interfaces[2];
 
         tcc->tgdb_debugger_context =

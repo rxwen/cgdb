@@ -194,6 +194,7 @@ int invoke_debugger(const char *path,
     int malloc_size = argc + extra;
     char slavename[64];
     int masterfd;
+    int is_jdb = 1;
 
     /* Copy the argv into the local_argv, and NULL terminate it.
      * sneak in the path name, the user did not type that */
@@ -202,20 +203,21 @@ int invoke_debugger(const char *path,
         local_argv[j++] = cgdb_strdup(path);
     else
         local_argv[j++] = cgdb_strdup(GDB);
+    if (!is_jdb) {
+        /* NOTE: These options have to come first, since if the user
+         * typed '--args' to GDB, everything at the end of the 
+         * users options become parameters to the inferior.
+         */
+        local_argv[j++] = cgdb_strdup(NW);
 
-    /* NOTE: These options have to come first, since if the user
-     * typed '--args' to GDB, everything at the end of the 
-     * users options become parameters to the inferior.
-     */
-    local_argv[j++] = cgdb_strdup(NW);
+        /* add the init file that the user did not type */
+        if (choice == 0)
+            local_argv[j++] = cgdb_strdup(ANNOTATE_TWO);
+        else if (choice == 1)
+            local_argv[j++] = cgdb_strdup(GDBMI);
 
-    /* add the init file that the user did not type */
-    if (choice == 0)
-        local_argv[j++] = cgdb_strdup(ANNOTATE_TWO);
-    else if (choice == 1)
-        local_argv[j++] = cgdb_strdup(GDBMI);
-
-    local_argv[j++] = cgdb_strdup(X);
+        local_argv[j++] = cgdb_strdup(X);
+    }
     local_argv[j++] = cgdb_strdup(F);
 
     /* copy in all the data the user entered */
