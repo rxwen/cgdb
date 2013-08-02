@@ -111,7 +111,7 @@ struct rline *rline_initialize(int slavefd, command_cb * command,
     rl_catch_sigwinch = 0;
 
     /* Tell readline what the prompt is if it needs to put it back */
-    rl_callback_handler_install("(gdb) ", command);
+    rl_callback_handler_install("(jdb) ", command);
     rl_bind_key('\t', completion);
 
     /* Set the terminal type to dumb so the output of readline can be

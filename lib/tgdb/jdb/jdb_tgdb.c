@@ -160,6 +160,11 @@ void *jdb_create_context(const char *debugger,
         "com.sun.jdi.SocketAttach:hostname=localhost,port=8000",
         NULL
     };
+
+    char jdb_debug_file[PATH_MAX];
+    fs_util_get_path(config_dir, "jdb_tgdb_debug.txt", jdb_debug_file);
+    io_debug_init(jdb_debug_file);
+
     jdb->debugger_pid =
             invoke_debugger("jdb", 2, args,
             &jdb->debugger_stdin, &jdb->debugger_out,
@@ -253,13 +258,16 @@ int jdb_parse_io(void *ctx,
 
 struct tgdb_list *jdb_get_client_commands(void *ctx)
 {
+    struct tgdb_jdb *jdb = (struct tgdb_jdb *) ctx;
 
-    return NULL;
+    return jdb->client_command_list;
 }
 
 pid_t jdb_get_debugger_pid(void *ctx)
 {
-    return 0;
+    struct tgdb_jdb *jdb = (struct tgdb_jdb*) ctx;
+
+    return jdb->debugger_pid;
 }
 
 int jdb_user_ran_command(void *ctx)
