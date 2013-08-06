@@ -195,6 +195,9 @@ int invoke_debugger(const char *path,
     char slavename[64];
     int masterfd;
     int is_jdb = 1;
+    int path_len = strlen(path);
+    if(path_len >= 3 && (0 == strncmp(path+path_len-3, "gdb", 3)))
+        is_jdb = 0;
 
     /* Copy the argv into the local_argv, and NULL terminate it.
      * sneak in the path name, the user did not type that */
@@ -218,7 +221,8 @@ int invoke_debugger(const char *path,
 
         local_argv[j++] = cgdb_strdup(X);
     }
-    local_argv[j++] = cgdb_strdup(F);
+    if (0 < strlen(F))
+        local_argv[j++] = cgdb_strdup(F);
 
     /* copy in all the data the user entered */
     for (i = 0; i < argc; i++)

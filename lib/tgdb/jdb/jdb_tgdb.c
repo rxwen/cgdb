@@ -155,18 +155,24 @@ void *jdb_create_context(const char *debugger,
         int argc, char **argv, const char *config_dir, struct logger *logger)
 {
     struct tgdb_jdb *jdb = initialize_tgdb_jdb();
-    char* args[] = {
+    char* cmds[] = {
+        "jdb",
         "-connect",
         "com.sun.jdi.SocketAttach:hostname=localhost,port=8000",
         NULL
     };
+    char** args = &(cmds[1]);
+    int args_num = 0;
+    while(args[args_num] != NULL) {
+        ++args_num;
+    }
 
     char jdb_debug_file[PATH_MAX];
     fs_util_get_path(config_dir, "jdb_tgdb_debug.txt", jdb_debug_file);
     io_debug_init(jdb_debug_file);
 
     jdb->debugger_pid =
-            invoke_debugger("jdb", 2, args,
+            invoke_debugger(cmds[0], args_num, args,
             &jdb->debugger_stdin, &jdb->debugger_out,
             1, jdb->jdb_init_file);
     jdb->tgdb_cur_output_command = ibuf_init();
@@ -282,7 +288,13 @@ int jdb_prepare_for_command(void *ctx, struct tgdb_command *com)
 
 int jdb_get_current_location(void *ctx, int on_startup)
 {
+    struct tgdb_jdb *jdb = (struct tgdb_jdb*) ctx;
+    struct tgdb_command *client_command = NULL;
+    const char* cmd = "run";
+    client_command = tgdb_command_create(cmd, TGDB_COMMAND_TGDB_CLIENT,
+    (void *) cmd);
 
+    tgdb_list_append(jdb->client_command_list, client_command);
     return 0;
 }
 
