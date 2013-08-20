@@ -324,6 +324,18 @@ struct tgdb *tgdb_initialize(const char *debugger,
     struct tgdb *tgdb = initialize_tgdb_context();
     char config_dir[FSUTIL_PATH_MAX];
 
+    /* default debugger type is jdb */
+    enum tgdb_client_supported_debuggers debugger_type = TGDB_CLIENT_DEBUGGER_JDB;
+    enum tgdb_client_supported_protocols debugger_protocol = TGDB_CLIENT_PROTOCOL_JDB;
+    int path_len = 0;
+    if(NULL != debugger) {
+        path_len = strlen(debugger);
+        if(path_len >= 3 && (0 == strncmp(debugger+path_len-3, "gdb", 3))) {
+            debugger_type = TGDB_CLIENT_DEBUGGER_GNU_GDB,
+            debugger_protocol = TGDB_CLIENT_PROTOCOL_GNU_GDB_ANNOTATE_TWO;
+        }
+    }
+
     /* Create config directory */
     if (tgdb_initialize_config_dir(tgdb, config_dir) == -1) {
         logger_write_pos(logger, __FILE__, __LINE__, "tgdb_initialize error");
@@ -340,10 +352,8 @@ struct tgdb *tgdb_initialize(const char *debugger,
     tgdb->oob_input_queue = queue_init();
 
     tgdb->tcc = tgdb_client_create_context(debugger, argc, argv, config_dir,
-            TGDB_CLIENT_DEBUGGER_JDB,
-            TGDB_CLIENT_PROTOCOL_JDB, logger);
-            /*TGDB_CLIENT_DEBUGGER_GNU_GDB,*/
-            /*TGDB_CLIENT_PROTOCOL_GNU_GDB_ANNOTATE_TWO, logger);*/
+            debugger_type,
+            debugger_protocol, logger);
 
     /* create an instance and initialize a tgdb_client_context */
     if (tgdb->tcc == NULL) {
