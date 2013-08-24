@@ -50,7 +50,7 @@ extern "C" {
    *
    * \param debugger
    * The path to the desired debugger to use. If this is NULL, then just
-   * "gdb" is used.
+   * "jdb" is used.
    *
    * \param argc
    * The number of arguments to pass to the debugger
