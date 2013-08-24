@@ -11,9 +11,9 @@ AM_CFLAGS = \
     -I$(top_srcdir)/lib/tgdb/jdb \
     -I$(top_srcdir)/lib/tokenizer
 
-bin_PROGRAMS = cgdb
+bin_PROGRAMS = cjdb
 
-cgdb_LDFLAGS = \
+cjdb_LDFLAGS = \
     -L$(top_builddir)/lib/adt \
     -L$(top_builddir)/lib/kui \
     -L$(top_builddir)/lib/rline \
@@ -24,7 +24,7 @@ cgdb_LDFLAGS = \
     -I$(top_builddir)/lib/tgdb/jdb \
     -L$(top_builddir)/lib/tgdb/tgdb-base
 
-cgdb_LDADD = \
+cjdb_LDADD = \
     $(top_builddir)/lib/tgdb/tgdb-base/libtgdb.a \
     $(top_builddir)/lib/tgdb/annotate-two/libtgdb_a2.a \
     $(top_builddir)/lib/tgdb/gdbmi/libtgdb_mi.a \
@@ -38,7 +38,7 @@ cgdb_LDADD = \
 noinst_HEADERS = \
     command_lexer.h
 
-cgdb_SOURCES = \
+cjdb_SOURCES = \
     cgdb.c \
     cgdb.h \
     cgdbrc.c \
