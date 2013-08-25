@@ -664,11 +664,12 @@ static char *version_info(void)
 {
     static char buf[MAXLINE];
 
-    sprintf(buf, "%s %s\r\n%s", "CGDB", VERSION,
+    sprintf(buf, "%s %s\r\n%s", "CJDB", VERSION,
             "Copyright 2002-2010 Bob Rossi and Mike Mueller.\n"
-            "CGDB is free software, covered by the GNU General Public License, and you are\n"
+            "Copyright 2013-2013 Raymond Wen.\n"
+            "CJDB is free software, covered by the GNU General Public License, and you are\n"
             "welcome to change it and/or distribute copies of it under certain conditions.\n"
-            "There is absolutely no warranty for CGDB.\n");
+            "There is absolutely no warranty for CJDB.\n");
     return buf;
 }
 
